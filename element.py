@@ -217,3 +217,24 @@ class Balloon():
             self.balloon_pic = "noballoon.png"
 
 
+#######################################################################################################################################################################################
+class Water():
+
+    WATER_HEIGHT = 60
+    WATER_WIDTH = 232
+
+    def __init__(self, posX, posY):
+        self.posX = posX
+        self.posY = posY
+        self.width = self.WATER_WIDTH
+        self.height = self.WATER_HEIGHT
+        self.water_pic = "water.png"
+        self.rect = Rect(self.posX, self.posY, self.width, self.height)
+
+    def render(self, surface):
+        self.water = pygame.image.load(self.water_pic)
+        self.rect = surface.blit(self.water, (self.posX, self.posY))
+
+
+    def getarect(self):
+        return self.rect

@@ -28,6 +28,7 @@ class BalloonGame(SimpleGame):
                       Floor(pos = (500, 70), width = 80, height = 100, pic = "smallheight_floor.png")]
         self.balloon1 = Balloon(self.player1)
         self.balloon2 = Balloon(self.player2)
+        self.water = Water(posX = 194, posY = 420)
         self.collide1 = Collision()
         self.collide2 = Collision()
         self.bounce = Bouncing()
@@ -54,6 +55,7 @@ class BalloonGame(SimpleGame):
         self.player2.set_pic(self.p2_life, "player2die.png")
 
         self.floor_check_player_and_balloon()
+        self.water_check()
 
         self.bgcheck.bg_check(self.player1, self.balloon1, self.bounce)
         self.bgcheck.bg_check(self.player2, self.balloon2, self.bounce)
@@ -64,6 +66,7 @@ class BalloonGame(SimpleGame):
         self.player2.render(surface) # render player2
         self.balloon1.render(surface) # render balloon1
         self.balloon2.render(surface) # render balloon2
+        self.water.render(surface) # render water
         for x in self.floor:
             x.render(surface) # render floor
         pygame.display.flip()
@@ -113,14 +116,22 @@ class BalloonGame(SimpleGame):
     def check_balloon(self): # check for gamemanage about life
         self.p1_life = self.player1.get_life()
         self.p2_life = self.player2.get_life()
-        self.p1_life = self.ballooncheck2.check(self.p1_life)
-        self.p2_life = self.ballooncheck1.check(self.p2_life)
-        # print self.p1_life
-        # print self.p2_life
+        self.p1_life = self.ballooncheck2.check_state(self.p1_life)
+        self.p2_life = self.ballooncheck1.check_state(self.p2_life)
         self.player1.set_life(self.p1_life)
         self.player2.set_life(self.p2_life)
 
 
+    def water_check(self):
+        if self.collide1.is_collide(self.player1.getarect(), self.water.getarect()):
+            if self.p1_life != 0 and self.p2_life != 0:
+                self.p1_life = 0
+                self.player1.set_life(self.p1_life)
+
+        if self.collide2.is_collide(self.player2.getarect(), self.water.getarect()):
+            if self.p2_life != 0 and self.p2_life != 0:
+                self.p2_life = 0
+                self.player2.set_life(self.p2_life)
 
 def main():
     game = BalloonGame()
